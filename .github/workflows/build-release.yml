@@ -46,8 +46,8 @@ jobs:
       id: sdl
       with:
         install-linux-dependencies: true
-        version: 2-latest
-        version-sdl-image: 2-latest
+        version: 3-head
+        version-sdl-image: 3-head
 
     - uses: actions/checkout@v4
 
