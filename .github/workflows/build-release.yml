@@ -18,8 +18,8 @@ jobs:
         c_compiler: [gcc, clang, cl]
         include:
           - os: windows-latest
-            c_compiler: clang
-            cpp_compiler: clang++
+            c_compiler: cl
+            cpp_compiler: cl
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
@@ -30,7 +30,7 @@ jobs:
           - os: windows-latest
             c_compiler: gcc
           - os: windows-latest
-            c_compiler: cl
+            c_compiler: clang
           - os: ubuntu-latest
             c_compiler: cl
           - os: ubuntu-latest
@@ -47,7 +47,6 @@ jobs:
       with:
         install-linux-dependencies: true
         version: 3-head
-        version-sdl-image: 3-head
 
     - uses: actions/checkout@v4
 
