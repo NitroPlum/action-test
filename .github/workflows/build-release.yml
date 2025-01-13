@@ -45,7 +45,7 @@ jobs:
       uses: libsdl-org/setup-sdl@main
       id: sdl
       with:
-        install-linux-dependencies: true
+        install-linux-dependencies: false
         version: 3-head
 
     - uses: actions/checkout@v4
