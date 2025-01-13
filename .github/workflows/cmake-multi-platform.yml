@@ -78,4 +78,4 @@ jobs:
       uses: actions/upload-artifact@v4.6.0
       with:
         name: ${{ matrix.os }} build
-        path: src/build/app
+        path: ${{ steps.strings.outputs.build-output-dir }}/app
