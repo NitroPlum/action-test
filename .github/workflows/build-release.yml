@@ -47,7 +47,6 @@ jobs:
       with:
         install-linux-dependencies: false
         version: 3-head
-        add-to-environment: true
 
     - uses: actions/checkout@v4
 
