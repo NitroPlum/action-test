@@ -43,7 +43,7 @@ jobs:
     - name: Prepare Upload
       run: |
         mkdir ./upload/
-        cp $SDL3_ROOT/lib/*.so ./upload/
+        cp $SDL3_ROOT/lib/*.dylib ./upload/
         cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
 
     - name: Upload Artifact
