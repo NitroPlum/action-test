@@ -44,6 +44,7 @@ jobs:
     - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -DPROJECT_NAME=${{env.GAME_NAME}}
         -DCMAKE_CXX_COMPILER=clang++
         -DCMAKE_C_COMPILER=clang
         -DCMAKE_BUILD_TYPE=Release
@@ -56,7 +57,7 @@ jobs:
       run: |
         mkdir ./upload/
         cp $SDL3_ROOT/lib/*.dylib ./upload/
-        cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
+        cp ${{ steps.strings.outputs.build-output-dir }}/${{env.GAME_NAME}} ./upload/
         cd ./upload/
         hdiutil create -srcfolder . -volname ${{env.GAME_NAME}} ${{env.GAME_NAME}}.dmg
 
@@ -67,17 +68,9 @@ jobs:
         path: ./upload/${{env.GAME_NAME}}.dmg
     
     - name: Upload to itch.io
-      run: butler push ./upload/ ${{env.ITCH_USERNAME}}/${{env.ITCH_GAME_ID}}:${{env.ITCH_MAC_CHANNEL}}
+      run: butler push ./upload/*.dmg ${{env.ITCH_USERNAME}}/${{env.ITCH_GAME_ID}}:${{env.ITCH_MAC_CHANNEL}}
       env:
         BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-    # - uses: KikimoraGames/itch-publish@v0.0.3
-    #   with:
-    #     gameData: ./upload/*
-    #     butlerApiKey: ${{secrets.BUTLER_API_KEY}}
-    #     itchUsername: ${{env.ITCH_USERNAME}}
-    #     itchGameId: ${{env.ITCH_GAME_ID}}
-    #     buildChannel: ${{env.ITCH_MAC_CHANNEL}}
-    #     buildNumber: ${{needs.version.outputs.version_hash}}
 
   build-windows:
     name: Build for Windows
@@ -104,6 +97,7 @@ jobs:
     - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -DPROJECT_NAME=${{env.GAME_NAME}}
         -DCMAKE_CXX_COMPILER=clang++
         -DCMAKE_C_COMPILER=clang
         -DCMAKE_BUILD_TYPE=Release
@@ -116,13 +110,18 @@ jobs:
       run: |
         mkdir ./upload/
         cp $SDL3_ROOT/lib/*.dll ./upload/
-        cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
+        cp ${{ steps.strings.outputs.build-output-dir }}/${{env.GAME_NAME}} ./upload/
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.6.0
       with:
         name: win-build
         path: ./upload/*
+    
+    - name: Upload to itch.io
+      run: butler push ./upload/ ${{env.ITCH_USERNAME}}/${{env.ITCH_GAME_ID}}:${{env.ITCH_WIN_CHANNEL}}
+      env:
+        BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
 
   build-linux:
     name: Build for Linux
@@ -149,6 +148,7 @@ jobs:
     - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -DPROJECT_NAME=${{env.GAME_NAME}}
         -DCMAKE_CXX_COMPILER=clang++
         -DCMAKE_C_COMPILER=clang
         -DCMAKE_BUILD_TYPE=Release
@@ -161,10 +161,15 @@ jobs:
       run: |
         mkdir ./upload/
         cp $SDL3_ROOT/lib/*.so ./upload/
-        cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
+        cp ${{ steps.strings.outputs.build-output-dir }}/${{env.GAME_NAME}} ./upload/
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.6.0
       with:
         name: linux-build
         path: ./upload/*
+    
+    - name: Upload to itch.io
+      run: butler push ./upload/ ${{env.ITCH_USERNAME}}/${{env.ITCH_GAME_ID}}:${{env.ITCH_LINUX_CHANNEL}}
+      env:
+        BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}

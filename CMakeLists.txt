@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(app)
+project(${PROJECT_NAME})
 
 # Make the executable look in its local directory for shared libs
 if(Win32)
