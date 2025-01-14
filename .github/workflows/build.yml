@@ -64,10 +64,10 @@ jobs:
       uses: actions/upload-artifact@v4.6.0
       with:
         name: mac-build
-        path: ./upload/app-mac.dmg
+        path: ./upload/${{env.GAME_NAME}}.dmg
     
     - name: Upload to itch.io
-      run: butler push ./upload/* ${{env.ITCH_USERNAME}}/${{env.ITCH_GAME_ID}}:${{env.ITCH_MAC_CHANNEL}}
+      run: butler push ./upload/ ${{env.ITCH_USERNAME}}/${{env.ITCH_GAME_ID}}:${{env.ITCH_MAC_CHANNEL}}
       env:
         BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
     # - uses: KikimoraGames/itch-publish@v0.0.3
