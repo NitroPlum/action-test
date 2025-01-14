@@ -87,6 +87,9 @@ jobs:
         version: 3-head
 
     - uses: actions/checkout@v4
+    - uses: buildalon/setup-butler@v1
+      with:
+        api-key: ${{ secrets.BUTLER_API_KEY }}
 
     - name: Set reusable strings
       id: strings
@@ -138,6 +141,9 @@ jobs:
         version: 3-head
 
     - uses: actions/checkout@v4
+    - uses: buildalon/setup-butler@v1
+      with:
+        api-key: ${{ secrets.BUTLER_API_KEY }}
 
     - name: Set reusable strings
       id: strings
