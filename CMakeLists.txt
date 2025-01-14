@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(app)
-set(CMAKE_INSTALL_RPATH "$ORIGIN")
+SET(CMAKE_INSTALL_RPATH "\${ORIGIN}")
 
 add_executable(${PROJECT_NAME} main.cpp)
 
