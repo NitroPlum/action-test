@@ -40,16 +40,18 @@ jobs:
     - name: Build
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
 
-    - name: Prepare Upload
+    - name: Create DMG
       run: |
         mkdir ./upload/
         cp $SDL3_ROOT/lib/*.dylib ./upload/
         cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
+        cd ./upload/
+        hdiutil create -srcfolder . -volname app-mac app-mac.dmg
 
     - name: Upload Artifact
       if: matrix.os != 'windows-latest'
       uses: actions/upload-artifact@v4.6.0
       with:
         name: Mac-build
-        path: ./upload/*
+        path: ./upload/app-mac.dmg
 

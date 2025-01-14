@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(app)
-set(CMAKE_MACOSX_RPATH 1)
 SET(CMAKE_SKIP_BUILD_RPATH FALSE)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+
+set(CMAKE_MACOSX_RPATH 1)
 SET(CMAKE_INSTALL_RPATH @executable_path)
 
 add_executable(${PROJECT_NAME} main.cpp)
