@@ -44,7 +44,7 @@ jobs:
       run: |
         mkdir ./upload/
         cp $SDL3_ROOT/lib/* ./upload/
-        cp ${{ steps.strings.outputs.build-output-dir }} ./upload/
+        cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
 
     - name: Upload Artifact
       if: matrix.os != 'windows-latest'
