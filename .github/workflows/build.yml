@@ -197,12 +197,7 @@ jobs:
       - name: Build for web
         run: |
           source emsdk/emsdk_env.sh
-          emcmake cmake -B ${{ steps.strings.outputs.build-output-dir }}
-          -DPROJECT_NAME=${{env.GAME_NAME}}
-          -DCMAKE_CXX_COMPILER=clang++
-          -DCMAKE_C_COMPILER=clang
-          -DCMAKE_BUILD_TYPE=Release
-          -S ${{ github.workspace }}
+          emcmake cmake -S ${{ github.workspace }} -B ${{ steps.strings.outputs.build-output-dir }} -DPROJECT_NAME=${{env.GAME_NAME}}
           cmake --build ${{ steps.strings.outputs.build-output-dir }} --parallel
 
       - name: Create Upload
