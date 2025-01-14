@@ -166,7 +166,7 @@ jobs:
     - name: Create Upload
       run: |
         mkdir ./upload/
-        cp $SDL3_ROOT/lib/*.so ./upload/
+        cp $SDL3_ROOT/lib/*.so* ./upload/
         cp ${{ steps.strings.outputs.build-output-dir }}/${{env.GAME_NAME}} ./upload/
 
     - name: Upload Artifact
