@@ -184,6 +184,10 @@ jobs:
     name: Build demo for Web
     runs-on: ubuntu-latest
     steps:
+      - uses: buildalon/setup-butler@v1
+        with:
+          api-key: ${{ secrets.BUTLER_API_KEY }}
+          
       - name: Install SDL
         uses: libsdl-org/setup-sdl@main
         id: sdl
