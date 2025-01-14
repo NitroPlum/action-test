@@ -75,7 +75,7 @@ jobs:
         name: ${{ matrix.os }} build
         path: |
           ${{ steps.strings.outputs.build-output-dir }}/*
-          ${{ env.SDL3_ROOT }}
+          ${{ env.DYLD_LIBRARY_PATH }}
 
     - name: Upload Windows Artifact
       if: matrix.os == 'windows-latest'
