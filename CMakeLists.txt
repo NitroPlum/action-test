@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
-project(${PROJECT_NAME})
+project(nitrogame)
 
 # Make the executable look in its local directory for shared libs
 if(Win32)
@@ -17,5 +17,12 @@ endif()
 
 add_executable(${PROJECT_NAME} main.cpp)
 
-find_package(SDL3 CONFIG REQUIRED)
+if(EMSCRIPTEN)
+  add_subdirectory(.vendor/SDL EXCLUDE_FROM_ALL)
+  # set(SDLTTF_VENDORED ON) # tell SDL_ttf to build its own dependencies
+  # add_subdirectory(SDL_ttf EXCLUDE_FROM_ALL)	
+else()
+  find_package(SDL3 CONFIG REQUIRED)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
