@@ -179,3 +179,41 @@ jobs:
       run: butler push ./upload/ ${{env.ITCH_USERNAME}}/${{env.ITCH_GAME_ID}}:${{env.ITCH_LINUX_CHANNEL}}
       env:
         BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+  
+  build-web:
+    name: Build demo for Web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Get Emscripten
+        run: |
+          git clone https://github.com/emscripten-core/emsdk.git --depth=1
+          cd emsdk
+          ./emsdk install tot
+          ./emsdk activate tot
+      - name: Build for web
+        run: |
+          source emsdk/emsdk_env.sh
+          emcmake cmake -B ${{ steps.strings.outputs.build-output-dir }}
+          -DPROJECT_NAME=${{env.GAME_NAME}}
+          -DCMAKE_CXX_COMPILER=clang++
+          -DCMAKE_C_COMPILER=clang
+          -DCMAKE_BUILD_TYPE=Release
+          -S ${{ github.workspace }}
+          emcmake cmake -S ${{ github.workspace }} -B ${{ steps.strings.outputs.build-output-dir }}
+          cmake --build ${{ steps.strings.outputs.build-output-dir }} --parallel
+
+      - name: Create Upload
+        run: |
+          mkdir ./upload/
+          cp ${{ steps.strings.outputs.build-output-dir }}/${{env.GAME_NAME}} ./upload/
+          cp ${{ github.workspace }}/index.html ./upload/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: web-build
+          path: ./upload/*
