@@ -70,7 +70,7 @@ jobs:
     - name: Prepare Upload
       run: |
         mkdir ./upload/
-        cp $SDL3_ROOT/lib/ ./upload/
+        cp $SDL3_ROOT/lib/* ./upload/
         cp ${{ steps.strings.outputs.build-output-dir }} ./upload/
 
     - name: Upload Artifact
