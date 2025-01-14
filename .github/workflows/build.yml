@@ -49,9 +49,97 @@ jobs:
         hdiutil create -srcfolder . -volname app-mac app-mac.dmg
 
     - name: Upload Artifact
-      if: matrix.os != 'windows-latest'
       uses: actions/upload-artifact@v4.6.0
       with:
-        name: Mac-build
+        name: mac-build
         path: ./upload/app-mac.dmg
 
+  build-windows:
+    name: Build for Windows
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+    
+    steps:
+    - name: Install SDL
+      uses: libsdl-org/setup-sdl@main
+      id: sdl
+      with:
+        install-linux-dependencies: false
+        version: 3-head
+
+    - uses: actions/checkout@v4
+
+    - name: Set reusable strings
+      id: strings
+      shell: bash
+      run: |
+        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+    - name: Configure CMake
+      run: >
+        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -DCMAKE_CXX_COMPILER=clang++
+        -DCMAKE_C_COMPILER=clang
+        -DCMAKE_BUILD_TYPE=Release
+        -S ${{ github.workspace }}
+
+    - name: Build
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
+
+    - name: Create Upload
+      run: |
+        mkdir ./upload/
+        cp $SDL3_ROOT/lib/*.dll ./upload/
+        cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4.6.0
+      with:
+        name: win-build
+        path: ./upload/*
+
+  build-linux:
+    name: Build for Linux
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    
+    steps:
+    - name: Install SDL
+      uses: libsdl-org/setup-sdl@main
+      id: sdl
+      with:
+        install-linux-dependencies: false
+        version: 3-head
+
+    - uses: actions/checkout@v4
+
+    - name: Set reusable strings
+      id: strings
+      shell: bash
+      run: |
+        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+
+    - name: Configure CMake
+      run: >
+        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -DCMAKE_CXX_COMPILER=clang++
+        -DCMAKE_C_COMPILER=clang
+        -DCMAKE_BUILD_TYPE=Release
+        -S ${{ github.workspace }}
+
+    - name: Build
+      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config Release
+
+    - name: Create Upload
+      run: |
+        mkdir ./upload/
+        cp $SDL3_ROOT/lib/*.so ./upload/
+        cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4.6.0
+      with:
+        name: linux-build
+        path: ./upload/*

@@ -1,10 +1,19 @@
 cmake_minimum_required(VERSION 3.14)
 project(app)
-SET(CMAKE_SKIP_BUILD_RPATH FALSE)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
-set(CMAKE_MACOSX_RPATH 1)
-SET(CMAKE_INSTALL_RPATH @executable_path)
+# Make the executable look in its local directory for shared libs
+if(Win32)
+  # Windows doesn't support RPATH
+elseif(APPLE)
+  set(CMAKE_SKIP_BUILD_RPATH FALSE)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+  set(CMAKE_MACOSX_RPATH 1)
+  set(CMAKE_INSTALL_RPATH @executable_path)
+elseif(UNIX)
+  set(CMAKE_SKIP_BUILD_RPATH FALSE)
+  set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+  set(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+endif()
 
 add_executable(${PROJECT_NAME} main.cpp)
 
