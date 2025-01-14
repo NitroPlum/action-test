@@ -203,7 +203,6 @@ jobs:
           -DCMAKE_C_COMPILER=clang
           -DCMAKE_BUILD_TYPE=Release
           -S ${{ github.workspace }}
-          emcmake cmake -S ${{ github.workspace }} -B ${{ steps.strings.outputs.build-output-dir }}
           cmake --build ${{ steps.strings.outputs.build-output-dir }} --parallel
 
       - name: Create Upload
