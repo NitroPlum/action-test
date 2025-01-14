@@ -218,7 +218,8 @@ jobs:
       - name: Create Upload
         run: |
           mkdir ./upload/
-          cp ${{ steps.strings.outputs.build-output-dir }}/${{env.GAME_NAME}} ./upload/
+          cp ${{ steps.strings.outputs.build-output-dir }}/*.js ./upload/
+          cp ${{ steps.strings.outputs.build-output-dir }}/*.wasm ./upload/
           cp ${{ github.workspace }}/index.html ./upload/
 
       - name: Upload Artifact
