@@ -82,4 +82,4 @@ jobs:
         name: ${{ matrix.os }} build
         path: |
           ${{ steps.strings.outputs.build-output-dir }}\Release\*
-          ${{ PATH/LD_LIBRARY_PATH/DYLD_LIBRARY_PATH }}
+          ${{ env.SDL_BUILD_PLATFORM }}
