@@ -227,3 +227,8 @@ jobs:
         with:
           name: web-build
           path: ./upload/*
+
+      - name: Upload to itch.io
+        run: butler push ./upload/ ${{env.ITCH_USERNAME}}/${{env.ITCH_GAME_ID}}:${{env.ITCH_WEB_CHANNEL}}
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
