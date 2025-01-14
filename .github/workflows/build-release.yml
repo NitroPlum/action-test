@@ -67,14 +67,18 @@ jobs:
     - name: Build
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
+    - name: Prepare Upload
+      run: |
+        mkdir ./upload/
+        cp $SDL_ROOT/lib ./upload/
+        cp ${{ steps.strings.outputs.build-output-dir }} ./upload/
+
     - name: Upload Artifact
       if: matrix.os != 'windows-latest'
       uses: actions/upload-artifact@v4.6.0
       with:
         name: ${{ matrix.os }} build
-        path: |
-          ${{ steps.strings.outputs.build-output-dir }}/*
-          ${{ env.SDL3_ROOT }}/*
+        path: ./upload/*
 
     - name: Upload Windows Artifact
       if: matrix.os == 'windows-latest'
