@@ -5,6 +5,15 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+env:
+  GAME_NAME: nitrogame
+
+  ITCH_USERNAME: nitroplum
+  ITCH_GAME_ID: nitrogame-engine
+  ITCH_WIN_CHANNEL: win
+  ITCH_MAC_CHANNEL: mac
+  ITCH_LINUX_CHANNEL: linux
+  ITCH_WEB_CHANNEL: web
 
 jobs:
   build-mac:
@@ -46,13 +55,22 @@ jobs:
         cp $SDL3_ROOT/lib/*.dylib ./upload/
         cp ${{ steps.strings.outputs.build-output-dir }}/app ./upload/
         cd ./upload/
-        hdiutil create -srcfolder . -volname app-mac app-mac.dmg
+        hdiutil create -srcfolder . -volname ${{env.GAME_NAME}} ${{env.GAME_NAME}}.dmg
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.6.0
       with:
         name: mac-build
         path: ./upload/app-mac.dmg
+
+    - uses: KikimoraGames/itch-publish@v0.0.3
+      with:
+        gameData: ./upload/*
+        butlerApiKey: ${{secrets.BUTLER_API_KEY}}
+        itchUsername: ${{env.ITCH_USERNAME}}
+        itchGameId: ${{env.ITCH_GAME_ID}}
+        buildChannel: ${{env.ITCH_MAC_CHANNEL}}
+        buildNumber: ${{needs.version.outputs.version_hash}}
 
   build-windows:
     name: Build for Windows
